@@ -6,6 +6,7 @@ using ToDoApp.Application.DTOs.Tasks.Steps;
 using ToDoApp.Application.Errors;
 using ToDoApp.Application.Mapping;
 using ToDoApp.Application.Services.Interfaces;
+using ToDoApp.Domain.Enums;
 using ToDoApp.Domain.Repositories;
 
 namespace ToDoApp.Application.Services.Realizations;
@@ -40,15 +41,15 @@ public class TaskService : ITaskService
         int userId,
         int? categoryId,
         string? searchTerm,
-        bool? isToday, 
+        TaskFilterType filter,
         int pageNumber,
         int pageSize)
     {
         var tasks = await _unitOfWork.Tasks.GetPagedTasksAsync(
-            userId, categoryId, searchTerm, isToday, pageNumber, pageSize);
+            userId, categoryId, searchTerm, filter, pageNumber, pageSize);
 
         var totalCount = await _unitOfWork.Tasks.GetTotalCountAsync(
-            userId, categoryId, searchTerm, isToday);
+            userId, categoryId, searchTerm, filter);
 
         var taskDtos = tasks.Select(t => t.ToDto());
         var response = new PagedResponseDto<TaskResponseDto>(taskDtos, totalCount, pageNumber, pageSize);

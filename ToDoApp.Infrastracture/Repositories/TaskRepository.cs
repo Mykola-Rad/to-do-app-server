@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ToDoApp.Domain.Entities;
+using ToDoApp.Domain.Enums;
 using ToDoApp.Domain.Repositories;
 using ToDoApp.Infrastracture.Data;
 
@@ -23,11 +24,11 @@ public class TaskRepository : RepositoryBase<ToDoTask>, ITaskRepository
         int userId,
         int? categoryId,
         string? searchTerm,
-        bool? isToday,
+        TaskFilterType filter,
         int pageNumber,
         int pageSize)
     {
-        var query = GetFilteredTasksQuery(userId, categoryId, searchTerm, isToday)
+        var query = GetFilteredTasksQuery(userId, categoryId, searchTerm, filter)
             .AsNoTracking()
             .Include(t => t.Category)
             .Include(t => t.Steps);
@@ -43,38 +44,20 @@ public class TaskRepository : RepositoryBase<ToDoTask>, ITaskRepository
     }
 
     public async Task<int> GetTotalCountAsync(
-        int userId, 
-        int? categoryId, 
-        string? searchTerm,
-        bool? isToday)
-    {
-        var query = GetFilteredTasksQuery(userId, categoryId, searchTerm, isToday);
-        return await query.CountAsync();
-    }
-
-    public async Task<IEnumerable<ToDoTask>> GetTasksByDateRangeAsync(
         int userId,
-        DateTime startDate,
-        DateTime endDate)
+        int? categoryId,
+        string? searchTerm,
+        TaskFilterType filter)
     {
-        return await _context.ToDoTasks
-            .AsNoTracking()
-            .Include(t => t.Category) 
-            .Include(t => t.Steps)
-            .Where(t => t.UserId == userId &&
-                        t.DueDate.HasValue &&
-                        t.DueDate.Value >= startDate &&
-                        t.DueDate.Value <= endDate)
-            .OrderBy(t => t.DueDate)
-            .ThenByDescending(t => t.CreatedAt)
-            .ToListAsync();
+        var query = GetFilteredTasksQuery(userId, categoryId, searchTerm, filter);
+        return await query.CountAsync();
     }
 
     private IQueryable<ToDoTask> GetFilteredTasksQuery(
         int userId,
         int? categoryId,
         string? searchTerm,
-        bool? isToday)
+        TaskFilterType filter)
     {
         var query = _context.ToDoTasks.Where(t => t.UserId == userId);
 
@@ -88,16 +71,17 @@ public class TaskRepository : RepositoryBase<ToDoTask>, ITaskRepository
             var normalizedSearch = searchTerm.ToLower();
             query = query.Where(t => t.Title.ToLower().Contains(normalizedSearch) ||
                                     (t.Description != null
-                                        && t.Description.ToLower()
-                                            .Contains(normalizedSearch)));
+                                        && t.Description.ToLower().Contains(normalizedSearch)));
         }
 
-        if (isToday.HasValue && isToday.Value)
+        var today = DateTime.UtcNow.Date;
+
+        query = filter switch
         {
-            var today = DateTime.UtcNow.Date;
-
-            query = query.Where(t => t.DueDate != null && t.DueDate.Value.Date == today);
-        }
+            TaskFilterType.Today => query.Where(t => t.DueDate != null && t.DueDate.Value.Date == today),
+            TaskFilterType.Planned => query.Where(t => t.DueDate != null),
+            _ => query
+        };
 
         return query;
     }

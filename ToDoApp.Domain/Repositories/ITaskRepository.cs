@@ -1,4 +1,5 @@
 ﻿using ToDoApp.Domain.Entities;
+using ToDoApp.Domain.Enums;
 
 namespace ToDoApp.Domain.Repositories
 {
@@ -9,19 +10,14 @@ namespace ToDoApp.Domain.Repositories
             int userId,
             int? categoryId,
             string? searchTerm,
-            bool? isToday,
+            TaskFilterType filter, 
             int pageNumber,
             int pageSize);
 
         Task<int> GetTotalCountAsync(
-            int userId, 
-            int? categoryId, 
+            int userId,
+            int? categoryId,
             string? searchTerm,
-            bool? isToday);
-
-        Task<IEnumerable<ToDoTask>> GetTasksByDateRangeAsync(
-            int userId, 
-            DateTime startDate, 
-            DateTime endDate);
+            TaskFilterType filter); 
     }
 }

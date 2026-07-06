@@ -24,10 +24,10 @@ namespace ToDoApp.Infrastracture.Data
 
             var globalCategories = new List<Category>
             {
-                new() { Name = "Work" },
-                new() { Name = "Personal" },
-                new() { Name = "Learning" },
-                new() { Name = "Sports" }
+                new() { Name = "Work", ColorHex = "#4A90E2" },      
+                new() { Name = "Personal", ColorHex = "#2ECC71" }, 
+                new() { Name = "Learning", ColorHex = "#9B59B6" }, 
+                new() { Name = "Sports", ColorHex = "#E67E22" }    
             };
 
             await context.Categories.AddRangeAsync(globalCategories);

@@ -4,6 +4,7 @@ using ToDoApp.Application.DTOs.Common;
 using ToDoApp.Application.DTOs.Tasks;
 using ToDoApp.Application.DTOs.Tasks.Steps;
 using ToDoApp.Application.Services.Interfaces;
+using ToDoApp.Domain.Enums;
 
 namespace ToDoApp.Api.Controllers;
 
@@ -33,12 +34,12 @@ public class TasksController : BaseApiController
     public async Task<IActionResult> GetPaged(
         [FromQuery] int? categoryId,
         [FromQuery] string? searchTerm,
-        [FromQuery] bool? isToday,
+        [FromQuery] TaskFilterType filter = TaskFilterType.All,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
         var result = await _taskService.GetPagedAsync(
-            CurrentUserId, categoryId, searchTerm, isToday, pageNumber, pageSize);
+            CurrentUserId, categoryId, searchTerm, filter, pageNumber, pageSize);
         return ProcessResult(result);
     }
 

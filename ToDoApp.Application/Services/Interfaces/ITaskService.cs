@@ -2,6 +2,7 @@
 using ToDoApp.Application.DTOs.Common;
 using ToDoApp.Application.DTOs.Tasks;
 using ToDoApp.Application.DTOs.Tasks.Steps;
+using ToDoApp.Domain.Enums;
 
 namespace ToDoApp.Application.Services.Interfaces
 {
@@ -9,7 +10,7 @@ namespace ToDoApp.Application.Services.Interfaces
     {
         Task<Result<TaskResponseDto>> GetByIdAsync(int id, int userId);
         Task<Result<PagedResponseDto<TaskResponseDto>>> GetPagedAsync(
-            int userId, int? categoryId, string? searchTerm, bool? isToday, int pageNumber, int pageSize);
+            int userId, int? categoryId, string? searchTerm, TaskFilterType filter, int pageNumber, int pageSize);
         Task<Result<TaskResponseDto>> CreateAsync(int userId, CreateTaskDto dto);
         Task<Result<TaskResponseDto>> UpdateAsync(int id, int userId, UpdateTaskDto dto);
         Task<Result> DeleteAsync(int id, int userId);
