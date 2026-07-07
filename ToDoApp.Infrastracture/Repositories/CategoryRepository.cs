@@ -15,7 +15,7 @@ namespace ToDoApp.Infrastracture.Repositories
         {
             return await _context.Categories
                 .AsNoTracking()
-                .Where(c => c.UserId == null || c.UserId == userId)
+                .Where(c => c.UserId == userId)
                 .ToListAsync();
         }
     }

@@ -49,14 +49,6 @@ public class CategoryService : ICategoryService
             return Result.Fail(new NotFoundError("The category was not found."));
         }
 
-        if (category.UserId == null)
-        {
-            _logger.LogWarning(
-                "Delete category failed: User {UserId} attempted " +
-                "to delete system category {CategoryId}.", userId, id);
-            return Result.Fail(new BadRequestError("Cannot delete a system category."));
-        }
-
         if (category.UserId != userId)
         {
             _logger.LogWarning(

@@ -85,4 +85,11 @@ public class TaskRepository : RepositoryBase<ToDoTask>, ITaskRepository
 
         return query;
     }
+
+    public async Task DeleteMultipleAsync(IEnumerable<int> ids, int userId)
+    {
+        await _context.ToDoTasks
+            .Where(t => ids.Contains(t.Id) && t.UserId == userId)
+            .ExecuteDeleteAsync();
+    }
 }

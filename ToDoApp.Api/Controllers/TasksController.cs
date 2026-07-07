@@ -107,4 +107,13 @@ public class TasksController : BaseApiController
         var result = await _taskService.ToggleStepAsync(id, stepId, CurrentUserId);
         return ProcessResult(result);
     }
+
+    [HttpPost("bulk-delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponseDto))]
+    public async Task<IActionResult> DeleteMultiple([FromBody] DeleteTasksDto dto)
+    {
+        var result = await _taskService.DeleteMultipleAsync(dto, CurrentUserId);
+        return ProcessResult(result);
+    }
 }

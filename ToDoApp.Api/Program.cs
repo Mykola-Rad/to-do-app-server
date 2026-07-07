@@ -112,8 +112,6 @@ namespace ToDoApp.Api
 
             app.UseExceptionHandler();
 
-            await DbInitializer.InitializeAsync(app.Services);
-
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

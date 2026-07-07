@@ -18,5 +18,7 @@ namespace ToDoApp.Application.Services.Interfaces
         Task<Result<TaskStepResponseDto>> AddStepAsync(int taskId, int userId, AddStepDto dto);
         Task<Result> RemoveStepAsync(int taskId, int stepId, int userId);
         Task<Result> ToggleStepAsync(int taskId, int stepId, int userId);
+
+        Task<Result> DeleteMultipleAsync(DeleteTasksDto dto, int userId);
     }
 }

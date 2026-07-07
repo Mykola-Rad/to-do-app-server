@@ -18,6 +18,8 @@ namespace ToDoApp.Domain.Repositories
             int userId,
             int? categoryId,
             string? searchTerm,
-            TaskFilterType filter); 
+            TaskFilterType filter);
+
+        Task DeleteMultipleAsync(IEnumerable<int> ids, int userId);
     }
 }

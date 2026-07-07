@@ -9,7 +9,6 @@ namespace ToDoApp.Application.DTOs.Tasks
         string? Description,
         bool IsCompleted,
         DateTime CreatedAt,
-        DateTime? CompletedAt,
         DateTime? DueDate,
         CategoryDto Category,
         IEnumerable<TaskStepResponseDto> Steps

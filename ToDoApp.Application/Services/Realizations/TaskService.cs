@@ -60,7 +60,7 @@ public class TaskService : ITaskService
     public async Task<Result<TaskResponseDto>> CreateAsync(int userId, CreateTaskDto dto)
     {
         var category = await _unitOfWork.Categories.GetByIdAsync(dto.CategoryId);
-        if (category == null || (category.UserId != null && category.UserId != userId))
+        if (category == null || category.UserId != userId)
         {
             _logger.LogWarning("Create task failed: Invalid category ID {CategoryId} " +
                 "specified by user {UserId}.", dto.CategoryId, userId);
@@ -90,7 +90,7 @@ public class TaskService : ITaskService
         }
 
         var category = await _unitOfWork.Categories.GetByIdAsync(dto.CategoryId);
-        if (category == null || (category.UserId != null && category.UserId != userId))
+        if (category == null || category.UserId != userId)
         {
             _logger.LogWarning("Update task failed: Invalid category ID {CategoryId} " +
                 "specified by user {UserId}.", dto.CategoryId, userId);
@@ -117,7 +117,6 @@ public class TaskService : ITaskService
         }
 
         task.IsCompleted = !task.IsCompleted;
-        task.CompletedAt = task.IsCompleted ? DateTime.UtcNow : null;
 
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok();
@@ -136,6 +135,15 @@ public class TaskService : ITaskService
 
         _unitOfWork.Tasks.Delete(task);
         await _unitOfWork.SaveChangesAsync();
+        return Result.Ok();
+    }
+
+    public async Task<Result> DeleteMultipleAsync(DeleteTasksDto dto, int userId)
+    {
+        await _unitOfWork.Tasks.DeleteMultipleAsync(dto.Ids, userId);
+
+        await _unitOfWork.SaveChangesAsync();
+
         return Result.Ok();
     }
 

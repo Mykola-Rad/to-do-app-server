@@ -16,7 +16,7 @@ namespace ToDoApp.Application.Mapping
             );
         }
 
-        public static Category ToEntity(this CreateCategoryDto dto, int? userId)
+        public static Category ToEntity(this CreateCategoryDto dto, int userId)
         {
             return new Category
             {

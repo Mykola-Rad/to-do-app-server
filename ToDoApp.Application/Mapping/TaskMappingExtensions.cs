@@ -16,7 +16,6 @@ namespace ToDoApp.Application.Mapping
                 task.Description,
                 task.IsCompleted,
                 task.CreatedAt,
-                task.CompletedAt,
                 task.DueDate,
                 task.Category.ToDto(),
                 task.Steps?.Select(step => step.ToDto()) ?? Enumerable.Empty<TaskStepResponseDto>()
@@ -33,7 +32,6 @@ namespace ToDoApp.Application.Mapping
                 UserId = userId,
                 CreatedAt = DateTime.UtcNow,
                 IsCompleted = false,
-                CompletedAt = null,
                 Description = null 
             };
         }
