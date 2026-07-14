@@ -69,9 +69,7 @@ public class TaskRepository : RepositoryBase<ToDoTask>, ITaskRepository
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
             var normalizedSearch = searchTerm.ToLower();
-            query = query.Where(t => t.Title.ToLower().Contains(normalizedSearch) ||
-                                    (t.Description != null
-                                        && t.Description.ToLower().Contains(normalizedSearch)));
+            query = query.Where(t => t.Title.ToLower().Contains(normalizedSearch));
         }
 
         var today = DateTime.UtcNow.Date;

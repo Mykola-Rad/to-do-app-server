@@ -37,37 +37,28 @@ namespace ToDoApp.Application.Services.Realizations
                 return Result.Fail<AuthResponseDto>(new BadRequestError("User with this email already exists."));
             }
 
-            var passwordHash = _passwordHasher.HashPassword(dto.Password);
+            var refreshToken = _tokenService.GenerateRefreshToken();
 
             var user = new User
             {
                 Email = dto.Email,
-                PasswordHash = passwordHash
+                PasswordHash = _passwordHasher.HashPassword(dto.Password),
+                RefreshToken = refreshToken,
+                RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7)
+            };
+
+            user.Categories = new List<Category>
+            {
+                new() { Name = "Work", ColorHex = "#4A90E2" },
+                new() { Name = "Personal", ColorHex = "#2ECC71" },
+                new() { Name = "Learning", ColorHex = "#9B59B6" },
+                new() { Name = "Sports", ColorHex = "#E67E22" }
             };
 
             await _unitOfWork.Users.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();
 
-            var globalCategories = new List<Category>
-            {
-                new() { Name = "Work", ColorHex = "#4A90E2", UserId = user.Id},
-                new() { Name = "Personal", ColorHex = "#2ECC71", UserId = user.Id },
-                new() { Name = "Learning", ColorHex = "#9B59B6", UserId = user.Id },
-                new() { Name = "Sports", ColorHex = "#E67E22", UserId = user.Id }
-            };
-
-            foreach (var category in globalCategories)
-            {
-                await _unitOfWork.Categories.AddAsync(category);
-            }
-
             var accessToken = _tokenService.GenerateAccessToken(user);
-            var refreshToken = _tokenService.GenerateRefreshToken();
-
-            user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
-
-            await _unitOfWork.SaveChangesAsync();
 
             var response = new AuthResponseDto(accessToken, refreshToken, user.Email);
             return Result.Ok(response);
@@ -78,7 +69,7 @@ namespace ToDoApp.Application.Services.Realizations
             var user = await _unitOfWork.Users.GetByEmailAsync(dto.Email);
             if (user == null || !_passwordHasher.VerifyPassword(dto.Password, user.PasswordHash))
             {
-                _logger.LogWarning("Failed login attempt for email: {Email}", dto.Email);
+                _logger.LogWarning($"Failed login attempt!");
 
                 return Result.Fail<AuthResponseDto>(
                     new UnauthorizedError("Incorrect email or password."));

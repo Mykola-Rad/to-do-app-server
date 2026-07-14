@@ -26,8 +26,9 @@ namespace ToDoApp.Api
             builder.Services.AddDbContext<ToDoDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
             builder.Services.AddProblemDetails();
+
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
             builder.Services.AddCors(options =>
             {
