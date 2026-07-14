@@ -18,7 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ToDoApp.Infrastracture\ToDoApp.Infrastracture.csproj" />
+    <ProjectReference Include="..\ToDoApp.Infrastructure\ToDoApp.Infrastructure.csproj" />
+    <ProjectReference Include="..\ToDoApp.Infrastructure\ToDoApp.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

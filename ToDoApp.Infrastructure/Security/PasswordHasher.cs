@@ -1,6 +1,6 @@
 ﻿using ToDoApp.Application.Interfaces;
 
-namespace ToDoApp.Infrastracture.Security
+namespace ToDoApp.Infrastructure.Security
 {
     public class PasswordHasher : IPasswordHasher
     {

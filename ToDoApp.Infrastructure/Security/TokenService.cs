@@ -7,7 +7,7 @@ using System.Text;
 using ToDoApp.Application.Interfaces;
 using ToDoApp.Domain.Entities;
 
-namespace ToDoApp.Infrastracture.Security
+namespace ToDoApp.Infrastructure.Security
 {
     public class TokenService : ITokenService
     {

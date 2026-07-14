@@ -101,13 +101,29 @@ namespace ToDoApp.Application.Services.Realizations
                 }
 
                 var user = await _unitOfWork.Users.GetByEmailAsync(email);
+                if (user == null)
+                {
+                    return Result.Fail<AuthResponseDto>(new UnauthorizedError("User not found."));
+                }
 
-                if (user == null
-                    || user.RefreshToken != dto.RefreshToken
-                    || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+                if (!string.IsNullOrEmpty(user.PreviousRefreshToken) && dto.RefreshToken == user.PreviousRefreshToken)
+                {
+                    _logger.LogCritical("SECURITY BREACH DETECTED for user '{Email}': " +
+                                        "A previously used refresh token was presented! Revoking session.", email);
+
+                    user.RefreshToken = null;
+                    user.PreviousRefreshToken = null;
+                    user.RefreshTokenExpiryTime = null;
+                    await _unitOfWork.SaveChangesAsync();
+
+                    return Result.Fail<AuthResponseDto>(
+                        new UnauthorizedError("Security breach detected. All sessions revoked. Please log in again."));
+                }
+
+                if (dto.RefreshToken != user.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
                 {
                     _logger.LogWarning("Token refresh failed for user '{Email}': " +
-                        "Invalid refresh token or token has expired.", email);
+                                       "Invalid refresh token or token has expired.", email);
                     return Result.Fail<AuthResponseDto>(
                         new UnauthorizedError("Invalid refresh token or token has expired."));
                 }
@@ -115,6 +131,7 @@ namespace ToDoApp.Application.Services.Realizations
                 var newAccessToken = _tokenService.GenerateAccessToken(user);
                 var newRefreshToken = _tokenService.GenerateRefreshToken();
 
+                user.PreviousRefreshToken = user.RefreshToken;
                 user.RefreshToken = newRefreshToken;
                 user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
 
@@ -125,7 +142,7 @@ namespace ToDoApp.Application.Services.Realizations
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Token refresh failed with an exception during token parsing.");
+                _logger.LogError(ex, "Token refresh failed with an exception during token parsing.");
                 return Result.Fail<AuthResponseDto>(
                     new BadRequestError("It was not possible to process the access token."));
             }

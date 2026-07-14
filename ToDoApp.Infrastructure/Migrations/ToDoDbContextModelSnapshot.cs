@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ToDoApp.Infrastracture.Data;
+using ToDoApp.Infrastructure.Data;
 
 #nullable disable
 
 namespace ToDoApp.Infrastracture.Migrations
 {
     [DbContext(typeof(ToDoDbContext))]
-    [Migration("20260703134203_InitialMigration")]
-    partial class InitialMigration
+    partial class ToDoDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,12 +30,16 @@ namespace ToDoApp.Infrastracture.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ColorHex")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -135,6 +136,9 @@ namespace ToDoApp.Infrastracture.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
+                    b.Property<string>("PreviousRefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RefreshToken")
                         .HasColumnType("nvarchar(max)");
 
@@ -154,7 +158,8 @@ namespace ToDoApp.Infrastracture.Migrations
                     b.HasOne("ToDoApp.Domain.Entities.User", "User")
                         .WithMany("Categories")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

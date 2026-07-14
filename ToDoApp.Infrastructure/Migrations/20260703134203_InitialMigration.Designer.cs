@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ToDoApp.Infrastracture.Data;
+using ToDoApp.Infrastructure.Data;
 
 #nullable disable
 
 namespace ToDoApp.Infrastracture.Migrations
 {
     [DbContext(typeof(ToDoDbContext))]
-    [Migration("20260705181208_AddedCompletedAtAttributeToTask")]
-    partial class AddedCompletedAtAttributeToTask
+    [Migration("20260703134203_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,10 +32,6 @@ namespace ToDoApp.Infrastracture.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ColorHex")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -62,9 +58,6 @@ namespace ToDoApp.Infrastracture.Migrations
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");

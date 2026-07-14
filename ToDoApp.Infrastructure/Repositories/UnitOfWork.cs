@@ -1,7 +1,7 @@
 ﻿using ToDoApp.Domain.Repositories;
-using ToDoApp.Infrastracture.Data;
+using ToDoApp.Infrastructure.Data;
 
-namespace ToDoApp.Infrastracture.Repositories
+namespace ToDoApp.Infrastructure.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {

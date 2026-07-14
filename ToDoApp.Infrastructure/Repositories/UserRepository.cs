@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ToDoApp.Domain.Entities;
 using ToDoApp.Domain.Repositories;
-using ToDoApp.Infrastracture.Data;
+using ToDoApp.Infrastructure.Data;
 
-namespace ToDoApp.Infrastracture.Repositories
+namespace ToDoApp.Infrastructure.Repositories
 {
     public class UserRepository : RepositoryBase<User>, IUserRepository
     {

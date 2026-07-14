@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ToDoApp.Domain.Repositories;
-using ToDoApp.Infrastracture.Data;
+using ToDoApp.Infrastructure.Data;
 
-namespace ToDoApp.Infrastracture.Repositories
+namespace ToDoApp.Infrastructure.Repositories
 {
     public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {

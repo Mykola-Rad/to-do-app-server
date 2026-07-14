@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ToDoApp.Infrastracture.Data;
+using ToDoApp.Infrastructure.Data;
 
 #nullable disable
 
 namespace ToDoApp.Infrastracture.Migrations
 {
     [DbContext(typeof(ToDoDbContext))]
-    partial class ToDoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260704160745_AddedColorToCategory")]
+    partial class AddedColorToCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,9 +62,6 @@ namespace ToDoApp.Infrastracture.Migrations
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
