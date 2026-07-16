@@ -16,10 +16,6 @@ namespace ToDoApp.Application.Validators.Tasks
 
             RuleFor(x => x.CategoryId)
                 .GreaterThan(0).WithMessage("You must choose a valid category.");
-
-            RuleFor(x => x.DueDate)
-                .Must(date => !date.HasValue || date.Value.Date >= DateTime.UtcNow.Date)
-                .WithMessage("Due date cannot be in the past.");
         }
     }
 }

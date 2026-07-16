@@ -158,6 +158,7 @@ namespace ToDoApp.Application.Services.Realizations
             }
 
             user.RefreshToken = null;
+            user.PreviousRefreshToken = null;
             user.RefreshTokenExpiryTime = null;
 
             await _unitOfWork.SaveChangesAsync();

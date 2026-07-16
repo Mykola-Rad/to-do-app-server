@@ -54,8 +54,7 @@ public class CategoryService : ICategoryService
             _logger.LogWarning(
                 "Delete category failed: User {UserId} does not have access " +
                 "to category {CategoryId}.", userId, id);
-            return Result.Fail(new NotFoundError("The category was not found " +
-                "or you do not have access."));
+            return Result.Fail(new NotFoundError("You do not have access to delete this category."));
         }
 
         _unitOfWork.Categories.Delete(category);
